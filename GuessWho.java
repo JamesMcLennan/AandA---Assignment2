@@ -171,7 +171,7 @@ public class GuessWho
                 // player 2 receives response and updates own status
                 // If player 2 made a person guess and it was correct, player2Finished should be true;
                 // otherwise be false
-                player2Finished = player1.receiveAnswer(currGuess, currAnswer);
+                player2Finished = player2.receiveAnswer(currGuess, currAnswer);
 
                 round++;
             }

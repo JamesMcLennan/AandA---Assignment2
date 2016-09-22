@@ -10,6 +10,9 @@ import java.io.*;
 public class BinaryGuessPlayer implements Player
 {
 
+    // VARIABLES FOR USE;
+    protected Character[] characters;
+
     /**
      * Loads the game configuration from gameFilename, and also store the chosen
      * person.
@@ -24,6 +27,9 @@ public class BinaryGuessPlayer implements Player
     public BinaryGuessPlayer(String gameFilename, String chosenName)
         throws IOException
     {
+
+	// Load all the data;
+	characters = Loader.LoadData(gameFilename);
 
     } // end of BinaryGuessPlayer()
 

@@ -10,6 +10,9 @@ import java.io.*;
 public class CustomGuessPlayer implements Player
 {
 
+    // VARIABLES FOR USE;
+    protected Character[] characters;
+
     /**
      * Loads the game configuration from gameFilename, and also store the chosen
      * person.
@@ -21,9 +24,15 @@ public class CustomGuessPlayer implements Player
      *    the "throws IOException" method specification, but make sure your
      *    implementation exits gracefully if an IOException is thrown.
      */
+
     public CustomGuessPlayer(String gameFilename, String chosenName)
         throws IOException
     {
+
+	// Load all the data;
+	characters = Loader.LoadData(gameFilename);
+		
+	System.exit(0);
 
     } // end of CustomGuessPlayer()
 
