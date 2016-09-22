@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.*;
 
 /**
  * Random guessing player.
@@ -12,6 +13,12 @@ public class RandomGuessPlayer implements Player
 
     // VARIABLES FOR USE;
     protected Character[] characters;
+    protected static String[] attributes = {"hairLength", "glasses", "facialHair", "eyeColor", "pimples",
+    		"hat", "hairColor", "noseShape", "faceShape"};
+    private static List<String> attList = Arrays.asList(attributes);
+    
+    //Input Scanner
+  	private static final Scanner sc = new Scanner(System.in);
 
     /**
      * Loads the game configuration from gameFilename, and also store the chosen
@@ -29,15 +36,27 @@ public class RandomGuessPlayer implements Player
 	
 	// Load all the data;
 	characters = Loader.LoadData(gameFilename);	
-
+	//attributes = {"hairLength", };
 
     } // end of RandomGuessPlayer()
 
 
     public Guess guess() {
-
-        // placeholder, replace
-        return new Guess(Guess.GuessType.Person, "", "Placeholder");
+    	String guess = null;
+    	String[] tokens = null;
+    	
+    	System.out.println("Please enter your guess:\n[!] To guess an attribute: <Attribute> <Value>\n[!] To guess a player: <Player>\n");
+    	guess = sc.nextLine();
+    	
+    	tokens = guess.split(" ");
+    	
+    	if(attList.contains(tokens[0])) {
+    		System.out.println("[!] Player is guessing an Attribute.\n");
+    		return new Guess(Guess.GuessType.Attribute, tokens[0], tokens[1]);
+    	}
+    	else {
+    		return new Guess(Guess.GuessType.Person, "", guess);
+    	}
     } // end of guess()
 
 
