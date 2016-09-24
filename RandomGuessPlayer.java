@@ -56,35 +56,61 @@ public class RandomGuessPlayer implements Player
 	String atr_guess;
 	String val_guess = null;
 	int char_guess;  
+	int counter = 0;
+	int last_loc = 0;
 
 	// Random for random choice;
 	Random random = new Random();
 
-	// Getting the attribute wanted.
-	atr_guess = attributes[random.nextInt(attributes.length) + 1];
+	// Checking if there is only ony player left;
+	// Getting the character;
+	for(int i = 0; i < characters.length; i++){
+
+		if(characters[i].isDown()){
+			
+			// Do nothing;
+
+		}else {
+
+					
+			System.out.println(characters[i].get("name"));
+
+			last_loc = i;
+			counter++;
+		}
+
+	}	
+
+	// If only one just go to guessing;
+	if(counter == 1){
+		
+		System.out.println(characters[last_loc].get("name"));
+		return new Guess(Guess.GuessType.Person, "", characters[last_loc].get("name"));	
+	
+	}
 
 
-	// Truth value;
-	boolean validguess = false;
-
-	while(validguess == false){
+	while(true){
 
 		// Assigning values;
-		char_guess = random.nextInt(characters.length) + 1;
+		// Getting the attribute wanted.
+		atr_guess = attributes[random.nextInt(attributes.length)];
+		char_guess = random.nextInt(characters.length);
 	
 		// Check if the character is eliminated;
 		if(characters[char_guess].isDown()){
 
-			// Try again for guess;
-			continue;
+			// Do nothing;
 		}else{
+			
+			break;
 
-			val_guess = characters[char_guess].get(atr_guess);
-			validguess = true;
 		}
 	}
 	
-        return new Guess(Guess.GuessType.Attribute, atr_guess, val_guess);
+
+	val_guess = characters[char_guess].get(atr_guess);
+	return new Guess(Guess.GuessType.Attribute, atr_guess, val_guess);
 
     } // end of guess()
 
@@ -93,6 +119,7 @@ public class RandomGuessPlayer implements Player
 
         // Checking the guess type;
 	// If attribute guess;
+
 	if((currGuess.getType()).equals(Guess.GuessType.Attribute)){
 
 		if((currGuess.getValue()).equals(chosen.get(currGuess.getAttribute()))){
@@ -116,24 +143,33 @@ public class RandomGuessPlayer implements Player
 			return false;
 		}
 
+
 	}
 
     } // end of answer()
 
 
     public boolean receiveAnswer(Guess currGuess, boolean answer) {
+	
 
 	// Checking type of guess.
 	if((currGuess.getType()).equals(Guess.GuessType.Attribute)){
 
-		if(answer == true){
+		if(answer == false){
 
 			// Checking all the stuff.
 			for(int i = 0; i < characters.length; i++){
 
 				if((characters[i].get(currGuess.getAttribute())).equals(currGuess.getValue())){
+			
+					if(characters[i].isDown()){
+				
+						// Do nothing;
 
-					characters[i].setDown();					
+					}else {
+
+						characters[i].setDown();				
+					}
 				}
 
 			}
@@ -143,19 +179,34 @@ public class RandomGuessPlayer implements Player
 		return false;
 
 	}else {
-
-		if((chosen.get("name")).equals(currGuess.getValue())){
+			
+		if(answer == true){
 
 			return true;
-		
+
 		}else {
 
-			return false;
+			// Checking all the stuff.
+			for(int i = 0; i < characters.length; i++){
+
+				if((characters[i].get("name")).equals(currGuess.getValue())){
+			
+					if(characters[i].isDown()){
+				
+						// Do nothing;
+
+					}else {
+
+						characters[i].setDown();				
+					}
+				}
+
+			}
 		}
 
 	}
 
-
+	return false;
     } // end of receiveAnswer()
 
 } // end of class RandomGuessPlayer

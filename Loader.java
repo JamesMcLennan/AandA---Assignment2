@@ -5,24 +5,16 @@ import joptsimple.OptionSet;
 import java.lang.String;
 
 public class Loader{
-
-	protected static boolean loaded = false;
-	protected static Character[] characters;
 	
 	public static Character[] LoadData(String gameFilename) throws IOException{
-
-		if(loaded == true){
-			
-			// For debug purposes.
-			System.out.println("[LOADER] Sent array to player 2.");
-
-			return characters;
-		}
 		
 		// Variables for use:
 		int lines = 0;
 		int counter = 0;
 		String line;
+
+		// For storage;
+		Character[] characters;
 
 		// For debug purposes.
 		System.out.println("[LOADER] Loading Data: " + gameFilename);
@@ -35,11 +27,9 @@ public class Loader{
 			
 			// For debug purposes.
 			System.out.println("[LOADER] Config file: " + gameFilename + " not found."); 
+			return null;
 		}
 
-		// For debug purposes.
-		System.out.println("[LOADER] " + gameFilename + " found.");
-	
 		// Creating Readers;
 		BufferedReader config_data = new BufferedReader(new FileReader(config));
 		BufferedReader loading_data = new BufferedReader(new FileReader(config));
@@ -56,17 +46,8 @@ public class Loader{
 			lines++;
 		}
 
-		// For debug purposes.
-		System.out.println("[LOADER] " + gameFilename + ": Characters = " + counter + ", Lines = " + lines);
-
 		// Assigning the array length;
 		characters = new Character[counter];
-
-		// For debug purposes.
-		System.out.println("[LOADER] Array length set.");
-
-		// For debug purposes.
-		System.out.println("[LOADER] Loading Characters....");
 
 		// Reseting for next use;
 		boolean cleared = false;
@@ -144,18 +125,9 @@ public class Loader{
 			}
 		}
 
-		// For debug purposes.
-		System.out.println("[LOADER] Load complete.");
-		System.out.println("[LOADER] Sent array to player 1.");
-
-
-
 		// Closing the reader/file;
 		config_data.close();
 		loading_data.close();
-
-		loaded = true;
-			
 		
 		return characters;
 	}
