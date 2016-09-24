@@ -72,9 +72,6 @@ public class RandomGuessPlayer implements Player
 
 		}else {
 
-					
-			System.out.println(characters[i].get("name"));
-
 			last_loc = i;
 			counter++;
 		}
