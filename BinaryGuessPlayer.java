@@ -12,6 +12,7 @@ public class BinaryGuessPlayer implements Player
 
     // VARIABLES FOR USE;
     protected Character[] characters;
+    protected Character chosen;
 
     /**
      * Loads the game configuration from gameFilename, and also store the chosen
@@ -27,16 +28,24 @@ public class BinaryGuessPlayer implements Player
     public BinaryGuessPlayer(String gameFilename, String chosenName)
         throws IOException
     {
+    	// Load all the data;
+		characters = Loader.LoadData(gameFilename);
+		
+		// Getting the character;
+		for(int i = 0; i < characters.length; i++) {
 
-	// Load all the data;
-	characters = Loader.LoadData(gameFilename);
-
+			if((characters[i].get("name")).equals(chosenName)) {
+				chosen = characters[i];
+				break;
+			}
+		}	
     } // end of BinaryGuessPlayer()
 
 
     public Guess guess() {
-
-        // placeholder, replace
+    	String guess_attribute;
+    	String guess_value;
+        
         return new Guess(Guess.GuessType.Person, "", "Placeholder");
     } // end of guess()
 
