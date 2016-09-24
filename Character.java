@@ -39,48 +39,37 @@ public class Character{
 		return true;
 	}
 
-	public String getName(){
+	public String get(String attribute){
 
-		return name;
+		switch(attribute){
+
+			case "name":
+				return name;
+			case "hairLength":
+				return hairLength;
+			case "glasses":
+				return glasses;
+			case "facialHair": 
+				return facialHair;
+			case "eyeColor":
+				return eyeColor;
+			case "pimples":
+				return pimples;
+			case "hat":
+				return hat;
+			case "hairColor":
+				return hairColor;
+			case "noseShape":
+				return noseShape;
+			case "faceShape":
+				return faceShape;
+		}
+
+		return "Unknown";
 	}
 
 	public boolean isDown(){
 		return isDown;
 	}
 
-	public String hairLength(){
-		return hairLength;
-	}
-
-	public String glasses(){
-		return glasses;
-	}
-
-	public String facialHair(){
-		return facialHair;
-	}
-
-	public String eyeColor(){
-		return eyeColor;
-	}
-
-	public String pimples(){
-		return pimples;
-	}
-
-	public String hat(){
-		return hat;
-	}
-
-	public String hairColor(){
-		return hairColor;
-	}
-
-	public String noseShape(){
-		return noseShape;
-	}
-
-	public String faceShape(){
-		return faceShape;
-	}
 }
