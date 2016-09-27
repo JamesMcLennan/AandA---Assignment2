@@ -11,6 +11,7 @@ public class Character{
 	protected String noseShape;
 	protected String faceShape;
 	protected boolean isDown;
+	protected Character[] suspects;
 	
 	public Character(String name, String hairLength, String glasses, String facialHair, String eyeColor, String pimples, String hat, String
 		hairColor, String noseShape, String faceShape){
@@ -70,6 +71,39 @@ public class Character{
 
 	public boolean isDown(){
 		return isDown;
+	}
+	
+	public void assignSuspects(Character[] array) {
+		this.suspects = array;
+	}
+	
+	public Character[] getSuspects() {
+		return suspects;
+	}
+	
+	public void removeSuspects(Character[] array, Guess currGuess, boolean answer) {
+		if(currGuess.getType().equals(Guess.GuessType.Attribute)) {
+			if(answer == false) {
+				for(int i = 0; i < array.length; i++) {
+					if(array[i] != null) {
+						if(currGuess.getValue().equals(array[i].get(currGuess.getAttribute()))) {
+							System.out.println("The character " + array[i].get("name") + " has been eliminated because it has guess'd values");
+							array[i] = null;
+						}
+					}
+				}
+			}
+			else {
+				for(int i = 0; i < array.length; i++) {
+					if(array[i] != null) {
+						if(!currGuess.getValue().equals(array[i].get(currGuess.getAttribute()))) {
+							System.out.println("The character " + array[i].get("name") + " has been eliminated because it does not have guess'd values");
+							array[i] = null;
+						}
+					}
+				}
+			}
+		}
 	}
 
 }

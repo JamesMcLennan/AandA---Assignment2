@@ -5,8 +5,16 @@ import joptsimple.OptionSet;
 import java.lang.String;
 
 public class Loader{
+
+	protected static boolean loaded = false;
+	//protected static Character[] characters;
+	protected static String[] attributes = {"hairLength", "glasses", "facialHair", "eyeColor", "pimples",
+    		"hat", "hairColor", "noseShape", "faceShape"};
+    private static List<String> attList = Arrays.asList(attributes);
+    
+    //static HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
 	
-	public static Character[] LoadData(String gameFilename) throws IOException{
+    public static Character[] LoadData(String gameFilename) throws IOException{
 		
 		// Variables for use:
 		int lines = 0;
@@ -132,4 +140,68 @@ public class Loader{
 		return characters;
 	}
 
+	public static HashMap<String, ArrayList<String>> LoadValues(String gameFilename) throws IOException {
+		// Variables for use:
+		String line;
+		String key = null;
+		boolean players = false;
+		HashMap<String, ArrayList<String>> map;
+		
+		// For debug purposes.
+		//System.out.println("[LOADER] Loading Value Data From: " + gameFilename);
+
+		// Creating file;
+		File config = new File(gameFilename);
+
+		// Checking if file exists;
+		if(!(config.exists())){
+			
+			// For debug purposes.
+		//	System.out.println("[LOADER] Config file: " + gameFilename + " not found."); 
+		}
+
+		// For debug purposes.
+		//System.out.println("[LOADER] " + gameFilename + " found.");
+		
+		map = new HashMap<String, ArrayList<String>>();
+	
+		// Creating Readers;
+		BufferedReader config_data = new BufferedReader(new FileReader(config));
+		
+		while((line = config_data.readLine()) != null){		
+			String[] tokens = line.split(" ");
+			ArrayList<String> valueList = new ArrayList<String>();
+			
+			for(String token : tokens) {
+				if(attList.contains(token)) {
+					key = token;
+					//System.out.println("Key: " + token);
+				}
+				
+				else if(token.equals("P1")) {
+					//System.out.println("Player found. Terminating file read.");
+					players = true;
+					break;
+				}
+				else {
+					valueList.add(token);
+					//System.out.println("Value: " + token);
+				}
+			}
+			if(players == true) {
+				break;
+			}
+			
+			//System.out.println("[!] Testing [!]");
+			//System.out.println(valueList + " are all values.");
+			
+			if(!map.containsKey(key)) {
+				map.put(key, valueList);
+				//System.out.println("Key Value Pair Added. " + key);
+			}
+		}
+		
+		config_data.close();
+		return map;
+	}
 }
