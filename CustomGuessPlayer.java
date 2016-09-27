@@ -19,7 +19,11 @@ public class CustomGuessPlayer implements Player
     // VARIABLES FOR GUESS;
     protected int[] guessed_attributes;
     protected String[] guessed_values;
+    protected Guess guess1 = null;
     protected Guess guess2 = null;
+    protected int characters_left;
+    protected float attribute_chance;
+    protected float person_chance;
 
  
     /**
@@ -60,6 +64,10 @@ public class CustomGuessPlayer implements Player
 		guessed_attributes[i] = 0;
 		guessed_values[i] = null;
 	}
+
+	// For later use;
+	characters_left = characters.length + 1;
+
 	
     } // end of CustomGuessPlayer()
 
@@ -72,6 +80,16 @@ public class CustomGuessPlayer implements Player
 	String person;
 	int counter = 0;
 	int last_loc = 0;
+
+	// Finding the most common Attr-value pair;
+	attr_value = findHighestAttrValuePair(attr_value);
+
+	// Finding the best choice.
+	findBestChoice();
+
+	// Print statements for debug;
+	System.out.println("[CUSTOM] Attribute:\t" + attribute_chance + "%.");
+	System.out.println("[CUSTOM] Person:\t" + person_chance + "%.");
 
 	// Checking if there is only ony player left;
 	// Getting the character;
@@ -93,26 +111,21 @@ public class CustomGuessPlayer implements Player
 		return new Guess(Guess.GuessType.Person, "", characters[last_loc].get("name"));	
 	}
 
-	// If there is a question waiting, use that instead;
-	if(guess2 != null){
+	// If chance of "correctness" higher then the other,
+	// go with that.
+	if(person_chance > attribute_chance){
 
 		curr_guess = guess2;
 		guess2 = null;
-
 		return curr_guess;
+
+	}else if(attribute_chance >= person_chance){
+
+	        return new Guess(Guess.GuessType.Attribute, attr_value[0], attr_value[1]);
 	}
 
-	// Finding the most common Attr-value pair;
-	attr_value = findHighestAttrValuePair(attr_value);
+	return new Guess(Guess.GuessType.Attribute, attr_value[0], attr_value[1]);
 
-	// Amongst the people who do not have the most
-	// common Attr-value pair, find the closest person
-	// Who has the other stuff;
-	findBestOutcast(attr_value[0], attr_value[1]);
-
-	// Calculating probability of effectiveness;
-	// Using the data to guess;
-        return new Guess(Guess.GuessType.Attribute, attr_value[0], attr_value[1]);
 
     } // end of guess()
 
@@ -167,25 +180,42 @@ public class CustomGuessPlayer implements Player
 
 					}else {
 
-						characters[i].setDown();				
+						characters[i].setDown();
+						characters_left--;				
 					}
 				}
 			}
 		}else {
 
+			// Checking all the stuff.
+			for(int i = 0; i < characters.length; i++){
+
+				if(!((characters[i].get(currGuess.getAttribute())).equals(currGuess.getValue()))){
+			
+					if(characters[i].isDown()){
+				
+						// Do nothing;
+
+					}else {
+
+						characters[i].setDown();
+						characters_left--;				
+					}
+				}
+			}
+
 			// Finding the location of the attribute and setting it to guess.
 			for(int i = 0; i < attributes.length; i++){
 				if(attributes[i].equals(currGuess.getAttribute())){
 					guessed_attributes[i] = 1;
+					guessed_values[i] = currGuess.getValue();	
 					break;
 				}
 			}
 
 			guess2 = null;
-					
 		}
 
-		return false;
 
 	}else {		
 		if(answer == true){
@@ -197,7 +227,8 @@ public class CustomGuessPlayer implements Player
 
 				if((characters[i].get("name")).equals(currGuess.getValue())){
 			
-					characters[i].setDown();	
+					characters[i].setDown();
+					characters_left--;
 					break;			
 				}
 			}
@@ -207,77 +238,58 @@ public class CustomGuessPlayer implements Player
 	return false;
     } // end of receiveAnswer()
 	
-    public boolean findBestOutcast(String attribute, String value){
+    public boolean findBestChoice(){
 
 	// Variables for use;	
-	Character outcast[];
-	int outcast_counter[];
+	int outcast_counter[] = new int[characters.length];;
 	int counter = 0;
 	int array_counter = 0;
+	int loc = 0;
 	int max = 0;
 
-	// Finding how many outcasts;
-	for(int i = 0; i < characters.length; i++){
-			
-		// If outcast found;
-		if(characters[i].get(attribute) != (value)){
-			
-			if(characters[i].isDown()){
-
-				// Do nothing;
-			}else{
-
-				counter++;
-			}
-		}
-
-	}
-
-	// Setting the array length;
-	outcast = new Character[counter];
-	outcast_counter = new int[counter];
-
-	// Finding the outcasts and putting them in the array;
-	for(int i = 0; i < characters.length; i++){
-			
-		// If outcast found;
-		if(characters[i].get(attribute) != (value)){
-
-			if(characters[i].isDown()){
-
-				// Do nothing;
-			}else{				
-				outcast[array_counter] = characters[i];
-				array_counter++;
-			}
-		}
-	}
-
 	// Finding if they resemble closest to the guessed values;
-	for(int i = 0; i < outcast.length; i++){	
-		// New counter;
-		int c = 0;
-		
-		for(int k = 0; k < attributes.length; k++){
-			if(outcast[i].get(attributes[k]).equals(guessed_values[k])){
-				c++;
-			}			
-		}
+	for(int i = 0; i < characters.length; i++){
 
-		outcast_counter[i] = c;
+		if(characters[i].isDown()){
+
+			// Do nothing;	
+			continue;	
+		}else{
+
+			
+			// New counter;
+			int c = 0;
+		
+			for(int k = 0; k < attributes.length; k++){
+
+				if(guessed_values[k] == null){
+
+					continue;
+				}
+
+				if(characters[i].get(attributes[k]).equals(guessed_values[k])){
+					c++;
+				}
+			}
+
+			outcast_counter[i] = c;	
+		}
 	}
 
 	// Finding the highest and setting it the next guess;	
-	for(int i = 0; i < outcast.length; i++){
+	for(int i = 0; i < characters.length; i++){
 		if(outcast_counter[i] > max){
 			max = outcast_counter[i];
+			loc = i;
 		}
 	}
 
+	// Setting the person chance;
+	person_chance = ((max * 100) / attributes.length);
+	
 
 	// Setting the guess2;
-	guess2 = new Guess(Guess.GuessType.Person, "", outcast[max].get("name"));
-
+	guess2 = new Guess(Guess.GuessType.Person, "", characters[loc].get("name"));
 
 	return false;
     }
@@ -297,7 +309,7 @@ public class CustomGuessPlayer implements Player
 	for(int i = 0; i < attributes.length; i++){
 
 		attributes_num[i] = 0;
-		attributes_color[i] = "blue";
+		attributes_color[i] = "null";
 	}
 
 	// Finding the most common attribute-value pair;
@@ -324,9 +336,12 @@ public class CustomGuessPlayer implements Player
 			for(int i = 0; i < characters.length; i++){
 
 				// No point checking eliminated characters;	
-				if(characters[j].isDown()){
+				if(characters[i].isDown()){
 					// Do nothing
-				}else if(i == j){
+					continue;
+				}
+
+				if(i == j){
 
 					// Do nothing;					
 				}else {
@@ -360,6 +375,9 @@ public class CustomGuessPlayer implements Player
 		}
 
 	}
+
+	// Setting the attribute chance;
+	attribute_chance = (attribute * 100) / (characters_left);
 	
 	// Return with 0;
 	array[0] = attributes[location];

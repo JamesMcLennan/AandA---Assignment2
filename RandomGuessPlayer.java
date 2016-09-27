@@ -80,10 +80,9 @@ public class RandomGuessPlayer implements Player
 
 	// If only one just go to guessing;
 	if(counter == 1){
-		
+
 		System.out.println(characters[last_loc].get("name"));
 		return new Guess(Guess.GuessType.Person, "", characters[last_loc].get("name"));	
-	
 	}
 
 
@@ -169,6 +168,26 @@ public class RandomGuessPlayer implements Player
 					}
 				}
 
+			}
+
+		}else {
+
+
+			// Checking all the stuff.
+			for(int i = 0; i < characters.length; i++){
+
+				if(!((characters[i].get(currGuess.getAttribute())).equals(currGuess.getValue()))){
+			
+					if(characters[i].isDown()){
+				
+						// Do nothing;
+
+					}else {
+
+						characters[i].setDown();
+						
+					}
+				}
 			}
 
 		}
