@@ -146,22 +146,14 @@ public class Loader{
 		String key = null;
 		boolean players = false;
 		HashMap<String, ArrayList<String>> map;
-		
-		// For debug purposes.
-		//System.out.println("[LOADER] Loading Value Data From: " + gameFilename);
 
 		// Creating file;
 		File config = new File(gameFilename);
 
 		// Checking if file exists;
 		if(!(config.exists())){
-			
-			// For debug purposes.
-		//	System.out.println("[LOADER] Config file: " + gameFilename + " not found."); 
+			System.out.println("[LOADER] Config file: " + gameFilename + " not found."); 
 		}
-
-		// For debug purposes.
-		//System.out.println("[LOADER] " + gameFilename + " found.");
 		
 		map = new HashMap<String, ArrayList<String>>();
 	
@@ -175,29 +167,23 @@ public class Loader{
 			for(String token : tokens) {
 				if(attList.contains(token)) {
 					key = token;
-					//System.out.println("Key: " + token);
 				}
 				
 				else if(token.equals("P1")) {
-					//System.out.println("Player found. Terminating file read.");
 					players = true;
 					break;
 				}
 				else {
 					valueList.add(token);
-					//System.out.println("Value: " + token);
 				}
 			}
+			
 			if(players == true) {
 				break;
 			}
 			
-			//System.out.println("[!] Testing [!]");
-			//System.out.println(valueList + " are all values.");
-			
 			if(!map.containsKey(key)) {
 				map.put(key, valueList);
-				//System.out.println("Key Value Pair Added. " + key);
 			}
 		}
 		
