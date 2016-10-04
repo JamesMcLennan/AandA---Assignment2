@@ -6,6 +6,11 @@ import java.lang.String;
 
 public class Loader{
 	
+	//Array to store attribute types.
+	protected static String[] attributes = {"hairLength", "glasses", "facialHair", "eyeColor", "pimples",
+    		"hat", "hairColor", "noseShape", "faceShape"};
+    private static List<String> attList = Arrays.asList(attributes);
+    
 	public static Character[] LoadData(String gameFilename) throws IOException{
 		
 		// Variables for use:
@@ -132,4 +137,60 @@ public class Loader{
 		return characters;
 	}
 
+	public static HashMap<String, ArrayList<String>> LoadValues(String gameFilename) throws IOException {
+		// Variables for use:
+		String line;
+		String key = null;
+		boolean players = false;
+		HashMap<String, ArrayList<String>> map;
+
+		// Creating file;
+		File config = new File(gameFilename);
+
+		// Checking if file exists;
+		if(!(config.exists())){
+			System.out.println("[LOADER] Config file: " + gameFilename + " not found."); 
+		}
+		
+		map = new HashMap<String, ArrayList<String>>();
+	
+		// Creating Readers;
+		BufferedReader config_data = new BufferedReader(new FileReader(config));
+		
+		while((line = config_data.readLine()) != null){		
+			String[] tokens = line.split(" ");
+			ArrayList<String> valueList = new ArrayList<String>();
+			
+			for(String token : tokens) {
+				//If the token scanned is an Attribute, assign key to token.
+				if(attList.contains(token)) {
+					key = token;
+				}
+				
+				//If player is scanned, stop loader.
+				else if(token.equals("P1")) {
+					players = true;
+					break;
+				}
+				
+				//Add values to list.
+				else {
+					valueList.add(token);
+				}
+			}
+			
+			//Terminate scan as player is loaded into an array.
+			if(players == true) {
+				break;
+			}
+			
+			//If the map does not already contain the key, put key/value into map.
+			if(!map.containsKey(key)) {
+				map.put(key, valueList);
+			}
+		}
+		
+		config_data.close();
+		return map;
+	}
 }
