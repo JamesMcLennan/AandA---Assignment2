@@ -96,9 +96,7 @@ public class CustomGuessPlayer implements Player
 	for(int i = 0; i < characters.length; i++){
 
 		if(characters[i].isDown()){
-			
 			// Do nothing;
-
 		}else {
 
 			last_loc = i;
@@ -113,13 +111,13 @@ public class CustomGuessPlayer implements Player
 
 	// If chance of "correctness" higher then the other,
 	// go with that.
-	if(person_chance > attribute_chance){
+	if(person_chance >= attribute_chance){
 
 		curr_guess = guess2;
 		guess2 = null;
 		return curr_guess;
 
-	}else if(attribute_chance >= person_chance){
+	}else if(attribute_chance > person_chance){
 
 	        return new Guess(Guess.GuessType.Attribute, attr_value[0], attr_value[1]);
 	}
@@ -144,7 +142,6 @@ public class CustomGuessPlayer implements Player
 		}else {
 
 			return false;
-
 		}
 
 	}else {
@@ -241,7 +238,7 @@ public class CustomGuessPlayer implements Player
     public boolean findBestChoice(){
 
 	// Variables for use;	
-	int outcast_counter[] = new int[characters.length];;
+	int outcast_counter[] = new int[characters.length];
 	int counter = 0;
 	int array_counter = 0;
 	int loc = 0;
@@ -256,14 +253,12 @@ public class CustomGuessPlayer implements Player
 			continue;	
 		}else{
 
-			
 			// New counter;
 			int c = 0;
 		
 			for(int k = 0; k < attributes.length; k++){
 
 				if(guessed_values[k] == null){
-
 					continue;
 				}
 
@@ -285,9 +280,8 @@ public class CustomGuessPlayer implements Player
 	}
 
 	// Setting the person chance;
-	person_chance = ((max * 100) / attributes.length);
+	person_chance = ((max * 100)/ (attributes.length) + (100 / characters_left));
 	
-
 	// Setting the guess2;
 	guess2 = new Guess(Guess.GuessType.Person, "", characters[loc].get("name"));
 
@@ -363,7 +357,6 @@ public class CustomGuessPlayer implements Player
 			}
 		}
 	}
-
 
 	// Finidng the highest out of all atrributes;
 	for(int i = 0; i < attributes.length; i++){
