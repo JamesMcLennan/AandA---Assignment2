@@ -20,27 +20,18 @@ public class Loader{
 
 		// For storage;
 		Character[] characters;
-
-		// For debug purposes.
-		System.out.println("[LOADER] Loading Data: " + gameFilename);
-
 		// Creating file;
 		File config = new File(gameFilename);
 
 		// Checking if file exists;
 		if(!(config.exists())){
-			
-			// For debug purposes.
-			System.out.println("[LOADER] Config file: " + gameFilename + " not found."); 
+			System.out.println("[!] Game file not found!");
 			return null;
 		}
 
 		// Creating Readers;
 		BufferedReader config_data = new BufferedReader(new FileReader(config));
 		BufferedReader loading_data = new BufferedReader(new FileReader(config));
-
-		// For debug purposes.
-		System.out.println("[LOADER] Scanning file...");
 
 		// Checking how many characters there are;
 		while((line = config_data.readLine()) != null){
@@ -58,7 +49,7 @@ public class Loader{
 		boolean cleared = false;
 		counter = 0;
 
-		// Checking how many characters there are;
+		// Reading and storing the characters;
 		while((line = loading_data.readLine()) != null){
 			if(cleared == true){	
 
@@ -109,15 +100,8 @@ public class Loader{
 
 				characters[counter] = character;
 				counter++;
-			
-				// For debug purposes.
-				//System.out.println(name + ", " + hairlength + ", " + glasses + ", " + facialhair + ", " + 
-						   //eyecolor + ", " + pimples + ", " + hat + ", " + haircolor + ", " +
-							// noseshape + ", " + faceshape);
 
 				loading_data.readLine();
-
-				
 
 			}else {
 
