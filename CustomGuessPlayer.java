@@ -65,7 +65,7 @@ public class CustomGuessPlayer implements Player
 		guessed_values[i] = null;
 	}
 
-	// For later use;
+	// For calculation use;
 	characters_left = characters.length + 1;
 
 	
@@ -84,12 +84,8 @@ public class CustomGuessPlayer implements Player
 	// Finding the most common Attr-value pair;
 	attr_value = findHighestAttrValuePair(attr_value);
 
-	// Finding the best choice.
+	// Finding the best candidate.
 	findBestChoice();
-
-	// Print statements for debug;
-	System.out.println("[CUSTOM] Attribute:\t" + attribute_chance + "%.");
-	System.out.println("[CUSTOM] Person:\t" + person_chance + "%.");
 
 	// Checking if there is only ony player left;
 	// Getting the character;
@@ -109,8 +105,8 @@ public class CustomGuessPlayer implements Player
 		return new Guess(Guess.GuessType.Person, "", characters[last_loc].get("name"));	
 	}
 
-	// If chance of "correctness" higher then the other,
-	// go with that.
+	// If chance higher then the othe,
+	// go with that guess.
 	if(person_chance >= attribute_chance){
 
 		curr_guess = guess2;
@@ -132,7 +128,6 @@ public class CustomGuessPlayer implements Player
 
         // Checking the guess type;
 	// If attribute guess;
-
 	if((currGuess.getType()).equals(Guess.GuessType.Attribute)){
 
 		if((currGuess.getValue()).equals(chosen.get(currGuess.getAttribute()))){
@@ -238,7 +233,7 @@ public class CustomGuessPlayer implements Player
     public boolean findBestChoice(){
 
 	// Variables for use;	
-	int outcast_counter[] = new int[characters.length];
+	int character_counter[] = new int[characters.length];
 	int counter = 0;
 	int array_counter = 0;
 	int loc = 0;
@@ -267,14 +262,14 @@ public class CustomGuessPlayer implements Player
 				}
 			}
 
-			outcast_counter[i] = c;	
+			character_counter[i] = c;	
 		}
 	}
 
 	// Finding the highest and setting it the next guess;	
 	for(int i = 0; i < characters.length; i++){
-		if(outcast_counter[i] > max){
-			max = outcast_counter[i];
+		if(character_counter[i] > max){
+			max = character_counter[i];
 			loc = i;
 		}
 	}
@@ -334,7 +329,8 @@ public class CustomGuessPlayer implements Player
 					// Do nothing
 					continue;
 				}
-
+			
+				// No point counting itself.
 				if(i == j){
 
 					// Do nothing;					
@@ -370,6 +366,7 @@ public class CustomGuessPlayer implements Player
 	}
 
 	// Setting the attribute chance;
+	// Possible elimination;
 	attribute_chance = (attribute * 100) / (characters_left);
 	
 	// Return with 0;

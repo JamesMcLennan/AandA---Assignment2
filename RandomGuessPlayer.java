@@ -80,12 +80,12 @@ public class RandomGuessPlayer implements Player
 
 	// If only one just go to guessing;
 	if(counter == 1){
-
-		System.out.println(characters[last_loc].get("name"));
 		return new Guess(Guess.GuessType.Person, "", characters[last_loc].get("name"));	
 	}
 
 
+	// Making sure the the character chosen
+        // is not down.
 	while(true){
 
 		// Assigning values;
@@ -100,12 +100,12 @@ public class RandomGuessPlayer implements Player
 		}else{
 			
 			break;
-
 		}
 	}
 	
-
+	// Setting values for guess.
 	val_guess = characters[char_guess].get(atr_guess);
+
 	return new Guess(Guess.GuessType.Attribute, atr_guess, val_guess);
 
     } // end of guess()
@@ -115,7 +115,6 @@ public class RandomGuessPlayer implements Player
 
         // Checking the guess type;
 	// If attribute guess;
-
 	if((currGuess.getType()).equals(Guess.GuessType.Attribute)){
 
 		if((currGuess.getValue()).equals(chosen.get(currGuess.getAttribute()))){
@@ -125,11 +124,10 @@ public class RandomGuessPlayer implements Player
 		}else {
 
 			return false;
-
 		}
 
 	}else {
-
+		// Check if player matches chosen name.
 		if((chosen.get("name")).equals(currGuess.getValue())){
 
 			return true;
@@ -138,8 +136,6 @@ public class RandomGuessPlayer implements Player
 
 			return false;
 		}
-
-
 	}
 
     } // end of answer()
@@ -153,7 +149,8 @@ public class RandomGuessPlayer implements Player
 
 		if(answer == false){
 
-			// Checking all the stuff.
+			// Setting down all characters that do
+			// have the guessed attribute.
 			for(int i = 0; i < characters.length; i++){
 
 				if((characters[i].get(currGuess.getAttribute())).equals(currGuess.getValue())){
@@ -172,8 +169,8 @@ public class RandomGuessPlayer implements Player
 
 		}else {
 
-
-			// Checking all the stuff.
+			// Setting down all characters that do NOT
+			// have the guessed attribute.
 			for(int i = 0; i < characters.length; i++){
 
 				if(!((characters[i].get(currGuess.getAttribute())).equals(currGuess.getValue()))){
@@ -184,8 +181,7 @@ public class RandomGuessPlayer implements Player
 
 					}else {
 
-						characters[i].setDown();
-						
+						characters[i].setDown();	
 					}
 				}
 			}
@@ -195,14 +191,14 @@ public class RandomGuessPlayer implements Player
 		return false;
 
 	}else {
-			
+
 		if(answer == true){
 
 			return true;
 
 		}else {
 
-			// Checking all the stuff.
+			// Finding character with guess name and set down.
 			for(int i = 0; i < characters.length; i++){
 
 				if((characters[i].get("name")).equals(currGuess.getValue())){
@@ -219,7 +215,6 @@ public class RandomGuessPlayer implements Player
 
 			}
 		}
-
 	}
 
 	return false;
