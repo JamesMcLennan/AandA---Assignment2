@@ -92,19 +92,48 @@ public class RandomGuessPlayer implements Player
 		// Getting the attribute wanted.
 		atr_guess = attributes[random.nextInt(attributes.length)];
 		char_guess = random.nextInt(characters.length);
-	
+			
+		// Setting values for guess.
+		val_guess = characters[char_guess].get(atr_guess);
+
 		// Check if the character is eliminated;
 		if(characters[char_guess].isDown()){
 
 			// Do nothing;
 		}else{
-			
-			break;
+
+			// Variable;
+			int num_common = 0;
+			int downs = 0;
+
+			// Check if guess is redundant or not by 
+			// checking if all characters have it;
+			for(int i = 0; i < characters.length; i++){
+
+				if(characters[i].isDown()){
+				
+					downs++;
+
+				}else {
+
+					if(characters[i].get(atr_guess).equals(val_guess)){
+
+						num_common++;
+					}
+				}
+			}
+
+			// If counter == character.length - downs;
+			// Means all remaining characters have the attribute;
+			// Thus, redundant.
+			if(num_common == (characters.length - downs)){
+
+				// Do nothing;
+			}else {
+				break;
+			}
 		}
 	}
-	
-	// Setting values for guess.
-	val_guess = characters[char_guess].get(atr_guess);
 
 	return new Guess(Guess.GuessType.Attribute, atr_guess, val_guess);
 

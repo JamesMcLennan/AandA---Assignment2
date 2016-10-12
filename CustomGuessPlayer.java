@@ -235,7 +235,6 @@ public class CustomGuessPlayer implements Player
 	// Variables for use;	
 	int character_counter[] = new int[characters.length];
 	int counter = 0;
-	int array_counter = 0;
 	int loc = 0;
 	int max = 0;
 
@@ -294,73 +293,90 @@ public class CustomGuessPlayer implements Player
 	String[] attributes_color = new String[attributes.length];
 	int attributes_num[] = new int[attributes.length];
 
-	// Initialising arrays;	
-	for(int i = 0; i < attributes.length; i++){
-
-		attributes_num[i] = 0;
-		attributes_color[i] = "null";
-	}
-
-	// Finding the most common attribute-value pair;
-	for(int k = 0; k < attributes.length; k++){
 	
-		// Checking if the current attribute already guessed;
-		if(guessed_attributes[k] == 1){
-			continue;
+	while(true){
+		// Initialising arrays;	
+		for(int i = 0; i < attributes.length; i++){
+
+			attributes_num[i] = 0;
+			attributes_color[i] = "null";
 		}
-		
-		// Looping thorugh all characters;
-		for(int j = 0; j < characters.length; j++){
 
-			// Varaibles for use;
-			String value = "null";
-			int num_commons = 1;
-
-			// No point checking eliminated characters;	
-			if(characters[j].isDown()){
+		// Finding the most common attribute-value pair;
+		for(int k = 0; k < attributes.length; k++){
+	
+			// Checking if the current attribute already guessed;
+			if(guessed_attributes[k] == 1){
 				continue;
-			}
+			}	
+		
+			// Looping thorugh all characters;
+			for(int j = 0; j < characters.length; j++){
 
-			// Loop for other characters.
-			for(int i = 0; i < characters.length; i++){
+				// Varaibles for use;
+				String value = "null";
+				int num_commons = 1;
 
 				// No point checking eliminated characters;	
-				if(characters[i].isDown()){
-					// Do nothing
+				if(characters[j].isDown()){
 					continue;
 				}
-			
-				// No point counting itself.
-				if(i == j){
-
-					// Do nothing;					
-				}else {
-
-					// Assigning String:
-					value = characters[j].get(attributes[k]);
 	
-					if((characters[j].get(attributes[k])).equals(characters[i].get(attributes[k]))){
+				// Loop for other characters.
+				for(int i = 0; i < characters.length; i++){
+
+					// No point checking eliminated characters;	
+					if(characters[i].isDown()){
+						// Do nothing
+						continue;
+					}
+			
+					// No point counting itself.
+					if(i == j){
+
+						// Do nothing;					
+					}else {
+
+						// Assigning String:
+						value = characters[j].get(attributes[k]);
+	
+						if((characters[j].get(attributes[k])).equals(characters[i].get(attributes[k]))){
 				
-						num_commons++;
+							num_commons++;
+						}	
 					}
 				}
-			}
 
-			// If current greatest, assign num and value;
-			if(num_commons > attributes_num[k]){
-				attributes_num[k] = num_commons;
-				attributes_color[k] = value;
+				// If current greatest, assign num and value;
+				if(num_commons > attributes_num[k]){
+					attributes_num[k] = num_commons;
+					attributes_color[k] = value;
+				}
 			}
 		}
-	}
 
-	// Finidng the highest out of all atrributes;
-	for(int i = 0; i < attributes.length; i++){
+		// Finidng the highest out of all atrributes;
+		for(int i = 0; i < attributes.length; i++){
 
-		if(attributes_num[i] > attribute){
+			if(attributes_num[i] > attribute){
 
-			attribute = attributes_num[i];
-			location = i;
+				attribute = attributes_num[i];
+				location = i;
+			}
+
+		}
+
+		// Checking for redundancy;	
+		if(attribute == characters_left){
+
+			// Setting to already known.
+			guessed_attributes[location] = 1;
+			guessed_values[location] = attributes_color[location];
+			
+		}else {
+
+			break;
+
 		}
 
 	}
