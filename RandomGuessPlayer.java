@@ -14,7 +14,7 @@ public class RandomGuessPlayer implements Player
     // VARIABLES FOR USE;
     protected Character[] characters;
     protected Character chosen;
-
+    protected int characters_left;
     protected String[] attributes = {"hairLength", "glasses", "facialHair", "eyeColor", "pimples",
     		"hat", "hairColor", "noseShape", "faceShape"};
 
@@ -35,7 +35,7 @@ public class RandomGuessPlayer implements Player
 	// Load all the data;
 	characters = Loader.LoadData(gameFilename);
 
-	// Getting the character;
+	// Getting the chosen character;
 	for(int i = 0; i < characters.length; i++){
 
 		if((characters[i].get("name")).equals(chosenName)){
@@ -45,6 +45,9 @@ public class RandomGuessPlayer implements Player
 		}
 
 	}	
+
+	// Initialising number of characters left.
+	characters_left = characters.length;
 
 
     } // end of RandomGuessPlayer()
@@ -85,7 +88,7 @@ public class RandomGuessPlayer implements Player
 
 
 	// Making sure the the character chosen
-        // is not down.
+        // is not "down".
 	while(true){
 
 		// Assigning values;
@@ -104,7 +107,6 @@ public class RandomGuessPlayer implements Player
 
 			// Variable;
 			int num_common = 0;
-			int downs = 0;
 
 			// Check if guess is redundant or not by 
 			// checking if all characters have it;
@@ -112,7 +114,7 @@ public class RandomGuessPlayer implements Player
 
 				if(characters[i].isDown()){
 				
-					downs++;
+					// Do nothing;
 
 				}else {
 
@@ -123,10 +125,10 @@ public class RandomGuessPlayer implements Player
 				}
 			}
 
-			// If counter == character.length - downs;
+			// If counter == characters_left
 			// Means all remaining characters have the attribute;
 			// Thus, redundant.
-			if(num_common == (characters.length - downs)){
+			if(num_common == characters_left){
 
 				// Do nothing;
 			}else {
@@ -143,7 +145,7 @@ public class RandomGuessPlayer implements Player
     public boolean answer(Guess currGuess) {
 
         // Checking the guess type;
-	// If attribute guess;
+	// If currGuess - attribute;
 	if((currGuess.getType()).equals(Guess.GuessType.Attribute)){
 
 		if((currGuess.getValue()).equals(chosen.get(currGuess.getAttribute()))){
@@ -190,7 +192,8 @@ public class RandomGuessPlayer implements Player
 
 					}else {
 
-						characters[i].setDown();				
+						characters[i].setDown();
+						characters_left--;			
 					}
 				}
 
@@ -210,7 +213,8 @@ public class RandomGuessPlayer implements Player
 
 					}else {
 
-						characters[i].setDown();	
+						characters[i].setDown();
+						characters_left--;	
 					}
 				}
 			}
@@ -238,7 +242,8 @@ public class RandomGuessPlayer implements Player
 
 					}else {
 
-						characters[i].setDown();				
+						characters[i].setDown();
+						characters_left--;				
 					}
 				}
 
