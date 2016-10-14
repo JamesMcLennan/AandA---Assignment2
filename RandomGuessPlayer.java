@@ -86,9 +86,7 @@ public class RandomGuessPlayer implements Player
 		return new Guess(Guess.GuessType.Person, "", characters[last_loc].get("name"));	
 	}
 
-
-	// Making sure the the character chosen
-        // is not "down".
+	// While loop to ensure no redundancy.
 	while(true){
 
 		// Assigning values;

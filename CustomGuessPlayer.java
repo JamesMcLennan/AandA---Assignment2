@@ -66,7 +66,7 @@ public class CustomGuessPlayer implements Player
 	}
 
 	// For calculation use;
-	characters_left = characters.length + 1;
+	characters_left = characters.length;
 
 	
     } // end of CustomGuessPlayer()
@@ -80,12 +80,6 @@ public class CustomGuessPlayer implements Player
 	String person;
 	int counter = 0;
 	int last_loc = 0;
-
-	// Finding the most common Attr-value pair;
-	attr_value = findHighestAttrValuePair(attr_value);
-
-	// Finding the best candidate.
-	findBestChoice();
 
 	// Checking if there is only ony player left;
 	// Getting the character;
@@ -104,6 +98,12 @@ public class CustomGuessPlayer implements Player
 	if(counter == 1){
 		return new Guess(Guess.GuessType.Person, "", characters[last_loc].get("name"));	
 	}
+
+	// Finding the most common Attr-value pair;
+	attr_value = findHighestAttrValuePair(attr_value);
+
+	// Finding the best candidate.
+	findBestChoice();
 
 	// If chance higher then the othe,
 	// go with that guess.
@@ -268,6 +268,7 @@ public class CustomGuessPlayer implements Player
 	}
 
 	// Finding the highest and setting it the next guess;	
+	// Also counting how many people have the same "max".
 	for(int i = 0; i < characters.length; i++){
 		if(character_counter[i] > max){
 			max = character_counter[i];
@@ -287,22 +288,27 @@ public class CustomGuessPlayer implements Player
     protected String[] findHighestAttrValuePair(String[] array){
 
 	// Variables for use;
-	int attribute = 0;
-	int location = 0;
-	int different;
+	int attribute;
+	int location;
 
 	// Arrays for use;
-	String[] attributes_color = new String[attributes.length];
-	int attributes_num[] = new int[attributes.length];
+	String attributes_color[] = new String[attributes.length];
+	int attributes_num[] = new int[attributes.length];	
 
-	
+	// While loop to ensure no redundancy.
 	while(true){
+
+		// Variables for use;
+		attribute = 0;
+        	location = 0;
+
 		// Initialising arrays;	
 		for(int i = 0; i < attributes.length; i++){
 
 			attributes_num[i] = 0;
 			attributes_color[i] = "null";
 		}
+
 
 		// Finding the most common attribute-value pair;
 		for(int k = 0; k < attributes.length; k++){
@@ -375,13 +381,12 @@ public class CustomGuessPlayer implements Player
 			// known values;
 			guessed_attributes[location] = 1;
 			guessed_values[location] = attributes_color[location];
-			
+	
 		}else {
 
 			break;
 
 		}
-
 	}
 
 	// Setting the attribute chance;
