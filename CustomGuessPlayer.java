@@ -268,7 +268,6 @@ public class CustomGuessPlayer implements Player
 	}
 
 	// Finding the highest and setting it the next guess;	
-	// Also counting how many people have the same "max".
 	for(int i = 0; i < characters.length; i++){
 		if(character_counter[i] > max){
 			max = character_counter[i];
